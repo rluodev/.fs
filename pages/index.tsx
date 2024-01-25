@@ -59,7 +59,7 @@ const Page: React.FC = () => {
 			// Request a pre-signed POST URL from the server
 			const response = await fetch('/api/getSignedUrl', {
 				method: 'POST',
-				body: JSON.stringify({ jwt: jwt, fileName: file.name.replaceAll(/[!@#$%^&*()\[\]\\;',/{}|:"<>?`]/g, '-').replaceAll(' ', ''), uuid: fileId, delTime: deletionTime, pwHash: pwHash }),
+				body: JSON.stringify({ jwt: jwt, fileName: file.name.replaceAll(/[^a-zA-Z0-9\.\~-]/g, '-').replaceAll(' ', ''), uuid: fileId, delTime: deletionTime, pwHash: pwHash }),
 				headers: {
 					'Content-Type': 'application/json'
 				},
