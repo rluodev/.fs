@@ -5,6 +5,8 @@ import { useRouter } from "next/router";
 import { FormEvent, useEffect, useState } from "react";
 
 export default function Page() {
+
+	console.log(process.env.NEXT_PUBLIC_MAIN_URL)
 	const router = useRouter();
 	const [fileUuid, setfileUuid] = useState(''); // dynamic slug
 	const [queryParams, setQueryParams] = useState<URLSearchParams>();
@@ -122,7 +124,7 @@ export default function Page() {
 							evt.preventDefault();
 							copyToClipboard(`${process.env.NEXT_PUBLIC_MAIN_URL}/${fileUuid}`);
 						}}>
-							{process.env.MAIN_URL}/{fileUuid}
+							{process.env.NEXT_PUBLIC_MAIN_URL}/{fileUuid}
 						</button>
 						<p className="text-white">This file expires at {new Date(objectState.expireAt).toLocaleString()}</p>
 						{!hasGeneratedTempUrl && <button className="text-white rounded-lg border p-4 transition-all duration-250 text-center items-center bg-gray-900 hover:bg-gray-700" onClick={(evt) => {
