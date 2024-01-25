@@ -4,6 +4,7 @@ import { createHash } from "crypto";
 import { useRouter } from "next/router";
 import { useState, useEffect, FormEvent } from "react";
 import { v4 as uuidv4 } from 'uuid';
+import imageType, { minimumBytes } from 'image-type';
 
 interface AuthResponse {
 	valid: boolean;

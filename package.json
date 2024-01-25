@@ -17,6 +17,7 @@
     "@smithy/hash-node": "^2.1.1",
     "@smithy/protocol-http": "^3.1.1",
     "@smithy/url-parser": "^2.1.1",
+    "image-type": "^5.2.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "4.1",
     "next": "14.1.0",

@@ -84,15 +84,14 @@ export default async function handler(req: any, res: any) {
 			await client.connect();
 			const database = client.db('fsdata');
 			const collection = database.collection('fsstorrecord');
-			const delTimeValue = parseInt(delTime.slice(0, -1)) * 24 * 60 * 60 * 1000;
+			const delTimeValue = delTime === 'Never' ? 0 : parseInt(delTime.slice(0, -1)) * 24 * 60 * 60 * 1000;
 			const record = {
 				accessPath: `/${uuid}/${fileName}`,
 				fileName: fileName,
 				uuid: uuid,
 				passwordHashed: pwHash ?? '',
-				expireAt: new Date(new Date(Date.now()).getTime() + delTimeValue),
+				expireAt: delTime === 'Never' ? new Date(8.64e14) : new Date(new Date(Date.now()).getTime() + delTimeValue),
 			};
-
 			await collection.insertOne(record);
 		} catch (error) {
 			console.error('Error creating mongo tracking record', error);

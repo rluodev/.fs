@@ -34,7 +34,7 @@ export default function Page() {
 	const generateTempSignedUrl = async () => {
 		const res = await fetch(`/api/getSignedTempUrl`, {
 			method: 'POST',
-			body: JSON.stringify({ uuid: fileUuid, pw: pw }),
+			body: JSON.stringify({ uuid: fileUuid, pw: pw, isDownload: true }),
 			headers: {
 				'Content-Type': 'application/json'
 			},
@@ -52,7 +52,7 @@ export default function Page() {
 	const generateTempSignedShortcutUrl = async () => {
 		const res = await fetch(`/api/createShortcutUrl`, {
 			method: 'POST',
-			body: JSON.stringify({ uuid: fileUuid, pw: pw }),
+			body: JSON.stringify({ uuid: fileUuid, pw: pw, expiry: objectState.expireAt }),
 			headers: {
 				'Content-Type': 'application/json'
 			},
@@ -136,7 +136,7 @@ export default function Page() {
 							setHasGeneratedTempUrl(true);
 							generateTempSignedShortcutUrl();
 						}}>
-							Generate a direct access link (lasts for 7 days)
+							Generate a direct access link (lasts until your file expires)
 						</button>
 						}
 						{hasGeneratedTempUrl && <button className={`text-white rounded-lg border p-4 transition-all duration-250 text-center items-center ${tempUrlIsGenerating && 'disabled'} bg-gray-900 hover:bg-gray-700`} onClick={(evt) => {
@@ -166,11 +166,15 @@ export default function Page() {
 							evt.preventDefault();
 							setHasGeneratedDlUrl(true);
 							generateTempSignedUrl();
+							//https://fs.rluo.dev/82aa9d89-a4b1-4527-8fe3-cd210d620b94/dotfs.ico?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAZI2LCEMGEPD7YL52%2F20240125%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Date=20240125T191251Z&X-Amz-Expires=604800&X-Amz-Signature=d5e1d2ed374f060e1ede8301db184db0607270ded1639cb842caa58ce5b3530c&X-Amz-SignedHeaders=host
 						}}>
 							Generate Download Link
 						</button>
 						}
-						{hasGeneratedDlUrl && <Link href={tempUrl} className="text-white rounded-lg border p-4 transition-all duration-250 text-center items-center bg-gray-900 hover:bg-gray-700" download>
+						{hasGeneratedDlUrl && <Link href="#" className="text-white rounded-lg border p-4 transition-all duration-250 text-center items-center bg-gray-900 hover:bg-gray-700" target="_blank" rel="noopener noreferrer" locale={false} onClick={async (evt) => {
+							evt.preventDefault();
+							if (!dlUrlIsGenerating) window.location.href = tempUrl;
+						}} download={true}>
 							{dlUrlIsGenerating ? 'Generating...' : 'Click to Download'}
 						</Link>}
 						<p className="text-white">This file expires at {new Date(objectState.expireAt).toLocaleString()}</p>
@@ -179,7 +183,7 @@ export default function Page() {
 							setHasGeneratedTempUrl(true);
 							generateTempSignedShortcutUrl();
 						}}>
-							Generate a direct access link (lasts for 7 days)
+							Generate a direct access link (lasts until your file expires)
 						</button>
 						}
 						{hasGeneratedTempUrl && <button className={`text-white rounded-lg border p-4 transition-all duration-250 text-center items-center ${tempUrlIsGenerating && 'disabled'} bg-gray-900 hover:bg-gray-700`} onClick={(evt) => {

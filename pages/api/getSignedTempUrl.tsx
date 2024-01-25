@@ -30,7 +30,7 @@ export default async function handler(req: any, res: any) {
 		res.status(405).json({ error: 'Method not allowed' });
 		return;
 	}
-	const { uuid, pw } = req.body;
+	const { uuid, pw, isDownload } = req.body;
 	if (!uuid) {
 		res.status(400).json({ error: 'Missing uuid' });
 		return;
@@ -50,8 +50,10 @@ export default async function handler(req: any, res: any) {
 		return;
 	}
 	const getData = await data.json();
-	const getDataKey = getData.accessPath.replaceAll(' ', '');
-
+	let getDataKey = getData.accessPath.replaceAll(' ', '');
+	if (isDownload) {
+		getDataKey += '?response-content-disposition=attachment';
+	}
 	try {
 		const noClientUrl = await createPresignedUrlWithoutClient({
 			region: process.env.REGION!,
