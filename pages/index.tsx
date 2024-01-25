@@ -37,6 +37,7 @@ const Page: React.FC = () => {
 				setAuthValid(true);
 				setJwt(res.jwt);
 				localStorage.setItem('jwt', res.jwt);
+				router.reload();
 			} else {
 				console.error('Invalid OTP');
 			}
