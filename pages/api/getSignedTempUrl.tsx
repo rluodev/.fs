@@ -11,7 +11,7 @@ import { Hash } from "@smithy/hash-node";
 import { MongoClient } from "mongodb";
 
 const createPresignedUrlWithoutClient = async ({ region, key }: { region: string, key: string }) => {
-	const url = parseUrl(`https://fs.rluo.dev${key}`);
+	const url = parseUrl(`${process.env.S3_URL}${key}`);
 	const presigner = new S3RequestPresigner({
 		credentials: {
 			accessKeyId: process.env.AWS_ACCESS_KEY_ID!,

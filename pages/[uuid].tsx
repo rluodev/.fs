@@ -120,9 +120,9 @@ export default function Page() {
 						<p className="text-white">Here&apos;s your share link (click/tap to copy)</p>
 						<button className="text-white rounded-lg border p-4 transition-all duration-250 text-center items-center bg-gray-900 hover:bg-gray-700" onClick={(evt) => {
 							evt.preventDefault();
-							copyToClipboard(`https://dotfs.rluo.dev/${fileUuid}`);
+							copyToClipboard(`${process.env.MAIN_URL}/${fileUuid}`);
 						}}>
-							https://dotfs.rluo.dev/{fileUuid}
+							{process.env.MAIN_URL}/{fileUuid}
 						</button>
 						<p className="text-white">This file expires at {new Date(objectState.expireAt).toLocaleString()}</p>
 						{!hasGeneratedTempUrl && <button className="text-white rounded-lg border p-4 transition-all duration-250 text-center items-center bg-gray-900 hover:bg-gray-700" onClick={(evt) => {
@@ -137,7 +137,7 @@ export default function Page() {
 							evt.preventDefault();
 							copyToClipboard(tempShortcutUrl);
 						}}>
-							{tempUrlIsGenerating ? 'Generating...' : tempUrl}
+							{tempUrlIsGenerating ? 'Generating...' : tempShortcutUrl}
 						</button>
 						}
 					</div>
@@ -171,7 +171,7 @@ export default function Page() {
 							evt.preventDefault();
 							copyToClipboard(tempShortcutUrl);
 						}}>
-							{tempUrlIsGenerating ? 'Generating...' : tempUrl}
+							{tempUrlIsGenerating ? 'Generating...' : tempShortcutUrl}
 						</button>
 						}
 					</div>
