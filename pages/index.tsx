@@ -146,7 +146,7 @@ const Page: React.FC = () => {
 			return (
 				<div className="flex flex-col justify-center items-center min-w-screen min-h-screen">
 					<div className="bg-transparent flex-col adaptive border border-grey-500 rounded-lg p-4 h-[80vh] w-[95vw] sm:h-[60vh] sm:w-[80vw] justify-center items-center text-center flex space-y-4">
-						<img src="/dotfs.svg" className="h-[10vh]" />
+						<img src="/dotfs.svg" alt="logo" className="h-[10vh]" />
 						<p className="text-white">Upload a file:</p>
 						<form onSubmit={(event: React.FormEvent<HTMLFormElement> & { target: { elements: { file: { files: any[]; }; deletionTime: string; }; }; }) => handleUpload(event)} className="space-x-4 flex-col flex justify-center items-center text-center space-y-4">
 							<input type="file" className="rounded-md bg-blue-950 transition-all duration-250 text-white py-2 px-4" name="file" id="file" />
@@ -197,7 +197,7 @@ const Page: React.FC = () => {
 			return (
 				<div className="flex flex-col justify-center items-center min-w-screen min-h-screen">
 					<div className="bg-transparent flex-col border border-grey-500 rounded-lg p-4 h-[80vh] w-[95vw] sm:h-[50vh] sm:w-[80vw] justify-center items-center text-center flex space-y-4">
-						<img src="/dotfs.svg" className="h-[10vh]" />
+						<img src="/dotfs.svg" alt="logo" className="h-[10vh]" />
 						<p className="text-white">Upload in progress ({uploadProgress.toFixed(2)}%)</p>
 						<div className="w-full bg-gray-200 rounded-md">
 							<div className="h-2 bg-blue-500 rounded-md" style={{ width: `${uploadProgress}%` }}></div>
@@ -213,7 +213,7 @@ const Page: React.FC = () => {
 		return (
 			<div className="flex flex-col justify-center items-center min-w-screen min-h-screen">
 				<div className="bg-transparent border border-grey-500 rounded-lg p-4 h-[80vh] w-[95vw] sm:h-[50vh] sm:w-[80vw] justify-center items-center text-center flex flex-col space-y-4 space-x-4">
-					<img src="/dotfs.svg" className="h-[10vh]" />
+					<img src="/dotfs.svg" alt="logo" className="h-[10vh]" />
 					<p className="text-white">Please authenticate with your TOTP code.</p>
 					<form onSubmit={(event: React.FormEvent<HTMLFormElement> & { target: HTMLFormElement }) => handleSubmit(event)} className="space-x-4">
 						<input type="text" className="text-black rounded-md border p-2 focus:outline-blue-500" name="otp" id="otp" />

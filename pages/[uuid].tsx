@@ -24,7 +24,7 @@ export default function Page() {
 		setfileUuid(uuid as string);
 		fetchData(uuid as string);
 
-	}, [router.isReady]);
+	}, [router.isReady, router.query]);
 
 	const generateTempSignedUrl = async () => {
 		const res = await fetch(`/api/getSignedTempUrl`, {
@@ -115,9 +115,9 @@ export default function Page() {
 			return (
 				<div className="flex flex-col justify-center items-center min-w-screen min-h-screen">
 					<div className="bg-transparent flex-col adaptive border rounded-lg p-4 h-[80vh] w-[95vw] sm:h-[60vh] sm:w-[80vw] justify-center items-center text-center flex space-y-4">
-						<img src="/dotfs.svg" className="h-[10vh]" />
+						<img src="/dotfs.svg" alt="logo" className="h-[10vh]" />
 						<p className="text-white">🎉 Yay! Your upload of <span className="font-bold underline underline-offset-2">{objectState.fileName}</span> was successful! 🎉</p>
-						<p className="text-white">Here's your share link (click/tap to copy)</p>
+						<p className="text-white">Here&apos;s your share link (click/tap to copy)</p>
 						<button className="text-white rounded-lg border p-4 transition-all duration-250 text-center items-center bg-gray-900 hover:bg-gray-700" onClick={(evt) => {
 							evt.preventDefault();
 							copyToClipboard(`https://dotfs.rluo.dev/${fileUuid}`);
@@ -147,9 +147,9 @@ export default function Page() {
 			return (
 				<div className="flex flex-col justify-center items-center min-w-screen min-h-screen">
 					<div className="bg-transparent flex-col adaptive border rounded-lg p-4 h-[80vh] w-[95vw] sm:h-[60vh] sm:w-[80vw] justify-center items-center text-center flex space-y-4">
-						<img src="/dotfs.svg" className="h-[10vh]" />
+						<img src="/dotfs.svg" alt="logo" className="h-[10vh]" />
 						<p className="text-white">🎉 Someone shared this file (<span className="font-bold underline underline-offset-2">{objectState.fileName}</span>) with you! 🎉</p>
-						<p className="text-white">Here's your download! (click to download and copy to clipboard)</p>
+						<p className="text-white">Here&apos;s your download! (click to download and copy to clipboard)</p>
 						<button className="text-white rounded-lg border p-4 transition-all duration-250 text-center items-center bg-gray-900 hover:bg-gray-700" onClick={(evt) => {
 							evt.preventDefault();
 							generateTempSignedUrl();
@@ -182,7 +182,7 @@ export default function Page() {
 		return (
 			<div className="flex flex-col justify-center items-center min-w-screen min-h-screen">
 				<div className="bg-transparent border border-grey-500 rounded-lg p-4 h-[80vh] w-[95vw] sm:h-[50vh] sm:w-[80vw] justify-center items-center text-center flex flex-col space-y-4 space-x-4">
-					<img src="/dotfs.svg" className="h-[10vh]" />
+					<img src="/dotfs.svg" alt="logo" className="h-[10vh]" />
 					<p className="text-white">Please enter the file access password:</p>
 					<form onSubmit={async (event: React.FormEvent<HTMLFormElement> & { target: HTMLFormElement }) => await handleSubmit(event)} className="space-x-4">
 						<input type="password" className="text-black rounded-md border p-2 focus:outline-blue-500" name="pw" id="pw" />
@@ -198,7 +198,7 @@ export default function Page() {
 		return (
 			<div className="flex flex-col justify-center items-center min-w-screen min-h-screen">
 				<div className="bg-transparent flex-col adaptive border border-grey-500 rounded-lg p-4 h-[80vh] w-[95vw] sm:h-[60vh] sm:w-[80vw] justify-center items-center text-center flex space-y-4">
-					<img src="/dotfs.svg" className="h-[10vh]" />
+					<img src="/dotfs.svg" alt="logo" className="h-[10vh]" />
 					<p className="text-white">Loading your file...</p>
 				</div>
 			</div>
