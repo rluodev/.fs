@@ -166,7 +166,6 @@ export default function Page() {
 							evt.preventDefault();
 							setHasGeneratedDlUrl(true);
 							generateTempSignedUrl();
-							//https://fs.rluo.dev/82aa9d89-a4b1-4527-8fe3-cd210d620b94/dotfs.ico?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAZI2LCEMGEPD7YL52%2F20240125%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Date=20240125T191251Z&X-Amz-Expires=604800&X-Amz-Signature=d5e1d2ed374f060e1ede8301db184db0607270ded1639cb842caa58ce5b3530c&X-Amz-SignedHeaders=host
 						}}>
 							Generate Download Link
 						</button>
