@@ -150,10 +150,10 @@ export default function Page() {
 						<img src="/dotfs.svg" alt="logo" className="h-[10vh]" />
 						<p className="text-white">🎉 Someone shared this file (<span className="font-bold underline underline-offset-2">{objectState.fileName}</span>) with you! 🎉</p>
 						<p className="text-white">Here&apos;s your download! (click to download and copy to clipboard)</p>
-						<button className="text-white rounded-lg border p-4 transition-all duration-250 text-center items-center bg-gray-900 hover:bg-gray-700" onClick={(evt) => {
+						<button className="text-white rounded-lg border p-4 transition-all duration-250 text-center items-center bg-gray-900 hover:bg-gray-700" onClick={async (evt) => {
 							evt.preventDefault();
-							generateTempSignedUrl();
-							copyToClipboard(`${tempUrl}`);
+							await generateTempSignedUrl();
+							await copyToClipboard(`${tempUrl}`);
 							router.push(tempUrl);
 						}}>
 							Download
