@@ -50,7 +50,8 @@ export default async function handler(req: any, res: any) {
 		return;
 	}
 	const getData = await data.json();
-	const getDataKey = getData.accessPath;
+	const getDataKey = getData.accessPath.replaceAll(' ', '');
+
 	try {
 		const noClientUrl = await createPresignedUrlWithoutClient({
 			region: process.env.REGION!,

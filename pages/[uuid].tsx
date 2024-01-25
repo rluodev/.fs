@@ -1,6 +1,7 @@
 'use client';
 
 import { createHash } from "crypto";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { FormEvent, useEffect, useState } from "react";
 
@@ -13,6 +14,8 @@ export default function Page() {
 	const [objectState, setObjectState] = useState<any>({});
 	const [passwordRequired, setPasswordRequired] = useState<boolean>(false);
 	const [hasGeneratedTempUrl, setHasGeneratedTempUrl] = useState<boolean>(false);
+	const [hasGeneratedDlUrl, setHasGeneratedDlUrl] = useState<boolean>(false);
+	const [dlUrlIsGenerating, setDlUrlIsGenerating] = useState<boolean>(true);
 	const [tempUrlIsGenerating, setTempUrlIsGenerating] = useState<boolean>(true);
 	const [tempUrl, setTempUrl] = useState<string>('');
 	const [tempShortcutUrl, setTempShortcutUrl] = useState<string>('');
@@ -39,6 +42,7 @@ export default function Page() {
 		if (res.status === 200) {
 			const data = await res.json();
 			setTempUrl(data.url);
+			setDlUrlIsGenerating(false);
 		} else {
 			console.log('Failed to fetch data')
 		}
@@ -151,15 +155,18 @@ export default function Page() {
 					<div className="bg-transparent flex-col adaptive border rounded-lg p-4 h-[80vh] w-[95vw] sm:h-[60vh] sm:w-[80vw] justify-center items-center text-center flex space-y-4">
 						<img src="/dotfs.svg" alt="logo" className="h-[10vh]" />
 						<p className="text-white">🎉 Someone shared this file (<span className="font-bold underline underline-offset-2">{objectState.fileName}</span>) with you! 🎉</p>
-						<p className="text-white">Here&apos;s your download! (click to download and copy to clipboard)</p>
-						<button className="text-white rounded-lg border p-4 transition-all duration-250 text-center items-center bg-gray-900 hover:bg-gray-700" onClick={async (evt) => {
+						<p className="text-white">Here&apos;s your download!</p>
+						{!hasGeneratedDlUrl && <button className="text-white rounded-lg border p-4 transition-all duration-250 text-center items-center bg-gray-900 hover:bg-gray-700" onClick={(evt) => {
 							evt.preventDefault();
-							await generateTempSignedUrl();
-							await copyToClipboard(`${tempUrl}`);
-							router.push(tempUrl);
+							setHasGeneratedDlUrl(true);
+							generateTempSignedUrl();
 						}}>
-							Download
+							Generate Download Link
 						</button>
+						}
+						{hasGeneratedDlUrl && <Link href={tempUrl} className="text-white rounded-lg border p-4 transition-all duration-250 text-center items-center bg-gray-900 hover:bg-gray-700" download>
+							{dlUrlIsGenerating ? 'Generating...' : 'Click to Download'}
+						</Link>}
 						<p className="text-white">This file expires at {new Date(objectState.expireAt).toLocaleString()}</p>
 						{!hasGeneratedTempUrl && <button className="text-white rounded-lg border p-4 transition-all duration-250 text-center items-center bg-gray-900 hover:bg-gray-700" onClick={(evt) => {
 							evt.preventDefault();
