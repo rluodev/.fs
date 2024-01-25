@@ -147,6 +147,12 @@ export default function Page() {
 						</button>
 						}
 					</div>
+					<button className="rounded-md bg-blue-950 hover:bg-blue-800 transition-all duration-250 text-white py-2 px-4 m-4 text-center items-center" onClick={(evt) => {
+						evt.preventDefault();
+						router.push('/');
+					}}>
+						Back to Home
+					</button>
 				</div>
 			);
 		} else {
