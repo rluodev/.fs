@@ -149,7 +149,7 @@ const Page: React.FC = () => {
 						<img src="/dotfs.svg" alt="logo" className="h-[10vh]" />
 						<p className="text-white">Upload a file:</p>
 						<form onSubmit={(event: React.FormEvent<HTMLFormElement> & { target: { elements: { file: { files: any[]; }; deletionTime: string; }; }; }) => handleUpload(event)} className="space-x-4 flex-col flex justify-center items-center text-center space-y-4">
-							<input type="file" className="rounded-md bg-blue-950 transition-all duration-250 text-white py-2 px-4" name="file" id="file" />
+							<input type="file" className="rounded-md bg-transparent border transition-all duration-250 text-white py-2 px-4" name="file" id="file" />
 							<select name="deletionTime" id="deletionTime" className="text-black rounded-md border p-2 focus:outline-blue-500">
 								<option value="1d">1 day</option>
 								<option value="3d">3 days</option>
