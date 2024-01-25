@@ -120,7 +120,7 @@ export default function Page() {
 						<p className="text-white">Here&apos;s your share link (click/tap to copy)</p>
 						<button className="text-white rounded-lg border p-4 transition-all duration-250 text-center items-center bg-gray-900 hover:bg-gray-700" onClick={(evt) => {
 							evt.preventDefault();
-							copyToClipboard(`${process.env.MAIN_URL}/${fileUuid}`);
+							copyToClipboard(`${process.env.NEXT_PUBLIC_MAIN_URL}/${fileUuid}`);
 						}}>
 							{process.env.MAIN_URL}/{fileUuid}
 						</button>
