@@ -1,7 +1,5 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { fromIni } from "@aws-sdk/credential-providers";
-import { Hash } from "@smithy/hash-node";
 import { MongoClient, ServerApiVersion } from "mongodb";
 
 export default async function handler(req: any, res: any) {
@@ -73,14 +71,6 @@ export default async function handler(req: any, res: any) {
 				unhoistableHeaders: unhoistableHeaders,
 			});
 
-			const client = new MongoClient(process.env.MONGODB_URI!, {
-				serverApi: {
-					version: ServerApiVersion.v1,
-					strict: true,
-					deprecationErrors: true,
-				}
-			});
-
 			await client.connect();
 			const database = client.db('fsdata');
 			const collection = database.collection('fsstorrecord');
@@ -93,6 +83,7 @@ export default async function handler(req: any, res: any) {
 				expireAt: delTime === 'Never' ? new Date(8.64e14) : new Date(new Date(Date.now()).getTime() + delTimeValue),
 			};
 			await collection.insertOne(record);
+			client.close();
 		} catch (error) {
 			console.error('Error creating mongo tracking record', error);
 			res.status(500).json({ error: 'Server error.' });

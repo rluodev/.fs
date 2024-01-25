@@ -1,14 +1,10 @@
-import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import { fromIni } from "@aws-sdk/credential-providers";
 import { HttpRequest } from "@smithy/protocol-http";
 import {
-	getSignedUrl,
 	S3RequestPresigner,
 } from "@aws-sdk/s3-request-presigner";
 import { parseUrl } from "@smithy/url-parser";
 import { formatUrl } from "@aws-sdk/util-format-url";
 import { Hash } from "@smithy/hash-node";
-import { MongoClient } from "mongodb";
 
 const createPresignedUrlWithoutClient = async ({ region, key }: { region: string, key: string }) => {
 	const url = parseUrl(`${process.env.S3_URL}${key}`);

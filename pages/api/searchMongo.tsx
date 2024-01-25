@@ -20,6 +20,7 @@ export default async function handler(req: any, res: any) {
 	const db = mongo.db('fsdata');
 	const collection = db.collection('fsstorrecord');
 	const record = await collection.findOne({ uuid: uuid });
+	mongo.close();
 	if (!record) {
 		res.status(404).json({ error: 'Record not found' });
 		return;

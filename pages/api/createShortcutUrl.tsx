@@ -40,6 +40,7 @@ export default async function handler(req: any, res: any) {
 		res.status(200).json({ url: newUrl });
 	} else {
 		console.log('Failed to fetch data')
+		res.status(500).json({ error: 'Server error' });
 	}
 }
 
@@ -56,6 +57,7 @@ async function mongoFindOne(uuid: string) {
 	const database = client.db('fsdata');
 	const collection = database.collection('fsshortcuts');
 	const record = await collection.findOne({ uuid: uuid });
+	client.close();
 	return record;
 }
 
@@ -82,6 +84,7 @@ async function mongoCreateOne(url: string, uuid: string, pw: string, expiry: num
 	};
 
 	await collection.insertOne(record);
+	client.close();
 	return `${process.env.NEXT_PUBLIC_MAIN_URL}/s/${record.slug}`;
 }
 
@@ -98,5 +101,6 @@ async function mongoUpdateOne(uuid: string, url: string) {
 	const database = client.db('fsdata');
 	const collection = database.collection('fsshortcuts');
 	await collection.updateOne({ uuid: uuid, createdAt: new Date() }, { $set: { accessPath: url } });
+	client.close();
 	return;
 }

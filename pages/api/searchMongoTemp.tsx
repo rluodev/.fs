@@ -20,6 +20,7 @@ export default async function handler(req: any, res: any) {
 	const db = mongo.db('fsdata');
 	const collection = db.collection('fsshortcuts');
 	const record = await collection.findOne({ slug: slug });
+	mongo.close();
 	if (!record) {
 		res.status(404).json({ error: 'Shortcut not found' });
 		return;
@@ -67,5 +68,6 @@ async function mongoUpdateOne(uuid: string, url: string) {
 	const collection = database.collection('fsshortcuts');
 	await collection.updateOne({ uuid: uuid }, { $set: { accessPath: url, createdAt: new Date() } });
 	const newRec = await collection.findOne({ uuid: uuid });
+	client.close();
 	return newRec;
 }

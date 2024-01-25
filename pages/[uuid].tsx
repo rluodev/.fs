@@ -4,6 +4,9 @@ import { createHash } from "crypto";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { FormEvent, useEffect, useState } from "react";
+import { DM_Mono } from "next/font/google";
+
+const dm = DM_Mono({ weight: "400", subsets: ['latin'] });
 
 export default function Page() {
 
@@ -128,7 +131,7 @@ export default function Page() {
 							evt.preventDefault();
 							copyToClipboard(`${process.env.NEXT_PUBLIC_MAIN_URL}/${fileUuid}`);
 						}}>
-							{process.env.NEXT_PUBLIC_MAIN_URL}/{fileUuid}
+							<span className={`${dm.className}`}>{process.env.NEXT_PUBLIC_MAIN_URL}/{fileUuid}</span>
 						</button>
 						<p className="text-white">This file expires at {new Date(objectState.expireAt).toLocaleString()}</p>
 						{!hasGeneratedTempUrl && <button className="text-white rounded-lg border p-4 transition-all duration-250 text-center items-center bg-gray-900 hover:bg-gray-700" onClick={(evt) => {
@@ -143,7 +146,7 @@ export default function Page() {
 							evt.preventDefault();
 							copyToClipboard(tempShortcutUrl);
 						}}>
-							{tempUrlIsGenerating ? 'Generating...' : tempShortcutUrl}
+							<span className={`${dm.className}`}>{tempUrlIsGenerating ? 'Generating...' : tempShortcutUrl}</span>
 						</button>
 						}
 					</div>
@@ -189,7 +192,7 @@ export default function Page() {
 							evt.preventDefault();
 							copyToClipboard(tempShortcutUrl);
 						}}>
-							{tempUrlIsGenerating ? 'Generating...' : tempShortcutUrl}
+							<span className={`${dm.className}`}>{tempUrlIsGenerating ? 'Generating...' : tempShortcutUrl}</span>
 						</button>
 						}
 					</div>
