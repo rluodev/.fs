@@ -171,7 +171,7 @@ export default function Page() {
 						{!hasGeneratedTempUrl && <button className="text-white rounded-lg border p-4 transition-all duration-250 text-center items-center bg-gray-900 hover:bg-gray-700" onClick={(evt) => {
 							evt.preventDefault();
 							setHasGeneratedTempUrl(true);
-							generateTempSignedUrl();
+							generateTempSignedShortcutUrl();
 						}}>
 							Generate a direct access link (lasts for 7 days)
 						</button>
