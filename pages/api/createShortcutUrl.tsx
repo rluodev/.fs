@@ -12,7 +12,7 @@ export default async function handler(req: any, res: any) {
 	}
 	const record = await mongoFindOne(uuid);
 	if (record !== null && record !== undefined) {
-		res.status(200).json({ url: `${process.env.MAIN_URL}/s/${record.slug}` });
+		res.status(200).json({ url: `${process.env.NEXT_PUBLIC_MAIN_URL}/s/${record.slug}` });
 		return;
 	}
 	const res2 = await fetch(`${process.env.API_URL}/getSignedTempUrl`, {
@@ -70,5 +70,5 @@ async function mongoCreateOne(url: string, uuid: string) {
 	};
 
 	await collection.insertOne(record);
-	return `${process.env.MAIN_URL}/s/${record.slug}`;
+	return `${process.env.NEXT_PUBLIC_MAIN_URL}/s/${record.slug}`;
 }
