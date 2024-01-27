@@ -23,6 +23,7 @@ export default function Page() {
 	const [tempUrl, setTempUrl] = useState<string>('');
 	const [tempShortcutUrl, setTempShortcutUrl] = useState<string>('');
 	const [pw, setPw] = useState<string>('');
+	const [isCopied, setIsCopied] = useState<string>('');
 
 	useEffect(() => {
 		if (!router.isReady) return;
@@ -119,6 +120,7 @@ export default function Page() {
 			console.log('Failed to copy: ', err)
 		}
 	};
+
 	if (Object.keys(objectState).length !== 0) {
 		if (queryParams && queryParams.has('uploadSuccess')) {
 			return (
@@ -130,8 +132,12 @@ export default function Page() {
 						<button className="text-white rounded-lg border p-4 transition-all duration-250 text-center items-center bg-gray-900 hover:bg-gray-700" onClick={(evt) => {
 							evt.preventDefault();
 							copyToClipboard(`${process.env.NEXT_PUBLIC_MAIN_URL}/${fileUuid}`);
+							setIsCopied('shareUrl');
+							const timer = setTimeout(() => {
+								setIsCopied('');
+							}, 2000);
 						}}>
-							<span className={`${dm.className}`}>{process.env.NEXT_PUBLIC_MAIN_URL}/{fileUuid}</span>
+							<span className={`${dm.className}`}>{isCopied === 'shareUrl' ? 'Copied!' : `${process.env.NEXT_PUBLIC_MAIN_URL}/${fileUuid}`}</span>
 						</button>
 						<p className="text-white">This file expires at {new Date(objectState.expireAt).toLocaleString()}</p>
 						{!hasGeneratedTempUrl && <button className="text-white rounded-lg border p-4 transition-all duration-250 text-center items-center bg-gray-900 hover:bg-gray-700" onClick={(evt) => {
@@ -145,8 +151,12 @@ export default function Page() {
 						{hasGeneratedTempUrl && <button className={`text-white rounded-lg border p-4 transition-all duration-250 text-center items-center ${tempUrlIsGenerating && 'disabled'} bg-gray-900 hover:bg-gray-700`} onClick={(evt) => {
 							evt.preventDefault();
 							copyToClipboard(tempShortcutUrl);
+							setIsCopied('tmpUrl');
+							const timer = setTimeout(() => {
+								setIsCopied('');
+							}, 2000);
 						}}>
-							<span className={`${dm.className}`}>{tempUrlIsGenerating ? 'Generating...' : tempShortcutUrl}</span>
+							<span className={`${dm.className}`}>{tempUrlIsGenerating ? 'Generating...' : isCopied === 'tmpUrl' ? 'Copied!' : tempShortcutUrl}</span>
 						</button>
 						}
 					</div>
@@ -163,7 +173,7 @@ export default function Page() {
 				<div className="flex flex-col justify-center items-center min-w-screen min-h-screen">
 					<div className="bg-transparent flex-col adaptive border rounded-lg p-4 h-[80vh] w-[95vw] sm:h-[60vh] sm:w-[80vw] justify-center items-center text-center flex space-y-4">
 						<img src="/dotfs.svg" alt="logo" className="h-[10vh]" />
-						<p className="text-white">🎉 Someone shared this file (<span className="font-bold underline underline-offset-2">{objectState.fileName}</span>) with you! 🎉</p>
+						<p className="text-white">🎉 {process.env.NEXT_PUBLIC_NAME} shared this file (<span className="font-bold underline underline-offset-2">{objectState.fileName}</span>) with you! 🎉</p>
 						<p className="text-white">Here&apos;s your download!</p>
 						{!hasGeneratedDlUrl && <button className="text-white rounded-lg border p-4 transition-all duration-250 text-center items-center bg-gray-900 hover:bg-gray-700" onClick={(evt) => {
 							evt.preventDefault();
@@ -191,8 +201,12 @@ export default function Page() {
 						{hasGeneratedTempUrl && <button className={`text-white rounded-lg border p-4 transition-all duration-250 text-center items-center ${tempUrlIsGenerating && 'disabled'} bg-gray-900 hover:bg-gray-700`} onClick={(evt) => {
 							evt.preventDefault();
 							copyToClipboard(tempShortcutUrl);
+							setIsCopied('tmpUrl');
+							const timer = setTimeout(() => {
+								setIsCopied('');
+							}, 2000);
 						}}>
-							<span className={`${dm.className}`}>{tempUrlIsGenerating ? 'Generating...' : tempShortcutUrl}</span>
+							<span className={`${dm.className}`}>{tempUrlIsGenerating ? 'Generating...' : isCopied === 'tmpUrl' ? 'Copied!' : tempShortcutUrl}</span>
 						</button>
 						}
 					</div>
@@ -225,4 +239,12 @@ export default function Page() {
 			</div>
 		);
 	}
+}
+
+export async function getServerSideProps() {
+	return {
+		props: {
+			title: `${process.env.NEXT_PUBLIC_NAME} shared a file with you!`,
+		},
+	};
 }

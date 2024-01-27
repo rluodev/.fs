@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { useState, useEffect, FormEvent } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import imageType, { minimumBytes } from 'image-type';
+import FileTable from "@/components/fileTable";
 
 interface AuthResponse {
 	valid: boolean;
@@ -19,6 +20,7 @@ const Page: React.FC = () => {
 	const [uploadProgress, setUploadProgress] = useState<number>(0);
 	const [uploadInProgress, setUploadInProgress] = useState<boolean>(false);
 	const [isAdvancedSettingsOpen, setIsAdvancedSettingsOpen] = useState(false);
+	const [isManagingFiles, setIsManagingFiles] = useState(false);
 
 	const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -146,13 +148,13 @@ const Page: React.FC = () => {
 	if (authValid) {
 		if (!uploadInProgress) {
 			return (
-				<div className="flex flex-col justify-center items-center min-w-screen min-h-screen">
-					<div className="bg-transparent flex-col adaptive border border-grey-500 rounded-lg p-4 h-[80vh] w-[95vw] sm:h-[60vh] sm:w-[80vw] justify-center items-center text-center flex space-y-4">
+				<div className="flex flex-col m-auto justify-center items-center min-w-screen min-h-screen adaptive space-y-4">
+					{!isManagingFiles && <div className="bg-transparent flex-col adaptive border border-grey-500 rounded-lg h-[80vh] w-[95vw] sm:h-[60vh] sm:w-[80vw] justify-center items-center text-center flex space-y-4">
 						<img src="/dotfs.svg" alt="logo" className="h-[10vh]" />
-						<p className="text-white">Upload a file:</p>
-						<form onSubmit={(event: React.FormEvent<HTMLFormElement> & { target: { elements: { file: { files: any[]; }; deletionTime: string; }; }; }) => handleUpload(event)} className="space-x-4 flex-col flex justify-center items-center text-center space-y-4">
-							<input type="file" className="rounded-md bg-transparent border transition-all duration-250 text-white py-2 px-4" name="file" id="file" />
-							<select name="deletionTime" id="deletionTime" className="text-black rounded-md border p-2 focus:outline-blue-500">
+						<p className="text-white m-auto">Upload a file:</p>
+						<form onSubmit={(event: React.FormEvent<HTMLFormElement> & { target: { elements: { file: { files: any[]; }; deletionTime: string; }; }; }) => handleUpload(event)} className="flex-col flex justify-center items-center text-center space-y-4 m-auto">
+							<input type="file" className="rounded-md bg-transparent border transition-all duration-250 text-white py-2 px-4 m-auto" name="file" id="file" />
+							<select name="deletionTime" id="deletionTime" className="text-black rounded-md border p-2 focus:outline-blue-500 m-auto">
 								<option value="1d">1 day</option>
 								<option value="3d">3 days</option>
 								<option value="7d">7 days</option>
@@ -171,28 +173,39 @@ const Page: React.FC = () => {
 								Advanced Settings {isAdvancedSettingsOpen ? '▲' : '▼'}
 							</button>
 							{isAdvancedSettingsOpen && (
-								<div className="text-white flex flex-col items-center text-start justify-center space-y-4">
+								<div className="text-white flex flex-col items-center text-start justify-center space-y-4 m-auto">
 									<label htmlFor="password">Password (leave blank or close advanced settings for none):</label>
-									<input type="password" className="text-black rounded-md border p-2 focus:outline-blue-500" name="password" id="password" />
+									<input type="password" className="text-black rounded-md border p-2 focus:outline-blue-500 m-auto" name="password" id="password" />
 								</div>
 							)}
-							<button type="submit" className="rounded-md bg-blue-950 hover:bg-blue-800 transition-all duration-250 text-white py-2 px-4">
+							<button type="submit" className="rounded-md bg-blue-950 hover:bg-blue-800 transition-all duration-250 text-white py-2 px-4 m-auto">
 								Upload
 							</button>
 						</form>
+					</div>}
+					{isManagingFiles && <div className="bg-transparent flex-col adaptive border border-grey-500 rounded-lg min-h-[80vh] w-[95vw] sm:min-h-[60vh] sm:w-[80vw] justify-center items-center text-center flex space-y-4">
+						<FileTable jwt={jwt}></FileTable>
+					</div>}
+					<div className="flex flex-row space-x-4 m-auto">
+						<button className="rounded-md bg-red-600 hover:bg-red-400 transition-all duration-250 text-white py-2 px-4 text-center items-center m-auto" onClick={(evt) => {
+							evt.preventDefault();
+							setAuthValid(false);
+							setJwt('');
+							localStorage.removeItem('jwt');
+							const reloadPage = () => {
+								router.reload();
+							};
+							reloadPage();
+						}}>
+							Log Out
+						</button>
+						<button className="rounded-md bg-blue-950 hover:bg-blue-800 transition-all duration-250 text-white py-2 px-4 text-center items-center" onClick={(evt) => {
+							evt.preventDefault();
+							setIsManagingFiles(!isManagingFiles);
+						}}>
+							{isManagingFiles ? "Back to Upload" : "Manage Files"}
+						</button>
 					</div>
-					<button className="rounded-md bg-blue-950 hover:bg-blue-800 transition-all duration-250 text-white py-2 px-4 m-4 text-center items-center" onClick={(evt) => {
-						evt.preventDefault();
-						setAuthValid(false);
-						setJwt('');
-						localStorage.removeItem('jwt');
-						const reloadPage = () => {
-							router.reload();
-						};
-						reloadPage();
-					}}>
-						Log Out
-					</button>
 				</div>
 			);
 		} else {
@@ -202,7 +215,7 @@ const Page: React.FC = () => {
 						<img src="/dotfs.svg" alt="logo" className="h-[10vh]" />
 						<p className="text-white">Upload in progress ({uploadProgress.toFixed(2)}%)</p>
 						<div className="w-full bg-gray-200 rounded-md">
-							<div className="h-2 bg-blue-500 rounded-md" style={{ width: `${uploadProgress}%` }}></div>
+							<div className="h-2 bg-blue-500 rounded-md transition-all duration-250" style={{ width: `${uploadProgress}%` }}></div>
 						</div>
 						<button onClick={cancelUpload} className="rounded-md bg-red-600 hover:bg-red-400 transition-all duration-250 text-white py-2 px-4">
 							Cancel Upload
@@ -230,3 +243,11 @@ const Page: React.FC = () => {
 }
 
 export default Page;
+
+export async function getServerSideProps() {
+	return {
+		props: {
+			title: 'Home',
+		},
+	};
+}

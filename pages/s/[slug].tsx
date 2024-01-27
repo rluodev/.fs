@@ -45,3 +45,11 @@ export default function Page() {
 	</div>
 	);
 }
+
+export async function getServerSideProps() {
+	return {
+		props: {
+			title: 'Direct Access Link',
+		},
+	};
+}
