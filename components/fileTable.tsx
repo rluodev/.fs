@@ -4,7 +4,7 @@ import { Hash, createHash } from "crypto";
 
 const PAGE_SIZE = 5;
 
-export default function fileTable(jwt: { jwt: string }) {
+export default function FileTable(jwt: { jwt: string }) {
 	const [files, setFiles] = useState<{ uuid: string, fileName: string, passwordHashed: string, expireAt: Date }[]>([]); // Add type annotation for files state variable
 	const [currentPage, setCurrentPage] = useState(1);
 	const [totalPages, setTotalPages] = useState(0);
@@ -144,7 +144,7 @@ export default function fileTable(jwt: { jwt: string }) {
 						<th className="border">Filename</th>
 						<th className="border w-[10vw] sm:w-[5vw]">Has PW?</th>
 						<th className="border w-[20vw] sm:w-[15vw]">Expires At</th>
-						<th className="border w-[25vw] sm:w-[15vw]">Actions</th>
+						<th className="border w-[25vw] sm:w-[20vw]">Actions</th>
 					</tr>
 				</thead>
 				<tbody className="w-full h-full">
