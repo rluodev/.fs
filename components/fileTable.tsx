@@ -34,8 +34,6 @@ export default function FileTable(jwt: { jwt: string }) {
 		}
 	}
 
-	const router = useRouter();
-
 	const fetchFiles = async () => {
 		const fileList = await listFiles();
 		setFiles(fileList);
