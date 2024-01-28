@@ -12,7 +12,7 @@ export default function Page() {
 
 	console.log(process.env.NEXT_PUBLIC_MAIN_URL)
 	const router = useRouter();
-	const [fileUuid, setfileUuid] = useState(''); // dynamic slug
+	const [fileUuid, setfileUuid] = useState('');
 	const [queryParams, setQueryParams] = useState<URLSearchParams>();
 	const [objectState, setObjectState] = useState<any>({});
 	const [passwordRequired, setPasswordRequired] = useState<boolean>(false);

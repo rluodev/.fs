@@ -2,8 +2,6 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export default function Page() {
-
-	const [tempLinkSlug, setTempLinkSlug] = useState<string>('');
 	const [destination, setDestination] = useState<string>('');
 
 	const router = useRouter();
@@ -33,7 +31,6 @@ export default function Page() {
 		if (!router.isReady) return;
 
 		const { slug } = router.query;
-		setTempLinkSlug(slug as string);
 		fetchData(slug as string);
 
 	}, [router.isReady, router.query]);

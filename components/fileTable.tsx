@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { Hash, createHash } from "crypto";
+import { createHash } from "crypto";
 
 const PAGE_SIZE = 5;
 
@@ -11,31 +11,25 @@ export default function FileTable(jwt: { jwt: string }) {
 	const [allSelected, setAllSelected] = useState(false);
 	const [loaded, setLoaded] = useState(false);
 	const [selectedFiles, setSelectedFiles] = useState<any[]>([]);
-	const [hasSelected, setHasSelected] = useState(false);
-	const [isSettingPW, setIsSettingPW] = useState(false);
 	const [isCopied, setIsCopied] = useState('');
 
 	const onChangeCheckAll = (e: any) => {
 		setAllSelected(e.target.checked);
 		if (e.target.checked) {
 			setSelectedFiles(files.map((file) => file.uuid));
-			setHasSelected(true);
 		} else {
 			setSelectedFiles([]);
-			setHasSelected(false);
 		}
 	};
 
 	const onCheckOne = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (e.target.checked) {
 			setSelectedFiles(selectedFiles.concat(e.target.name));
-			setHasSelected(true);
 			if (selectedFiles.length + 1 === files.length) {
 				setAllSelected(true);
 			}
 		} else {
 			setSelectedFiles(selectedFiles.filter((item) => item !== e.target.name));
-			setHasSelected(selectedFiles.length - 1 > 0);
 			setAllSelected(false);
 		}
 	}
@@ -92,7 +86,6 @@ export default function FileTable(jwt: { jwt: string }) {
 
 	const setPassword = async (uuid: string, password: string) => {
 		const pw = password !== '' ? createHash('sha512').update(password).digest('hex') : '';
-		setIsSettingPW(true);
 		setLoaded(false);
 		const res = await fetch('/api/setPassword', {
 			method: 'POST',
@@ -104,7 +97,6 @@ export default function FileTable(jwt: { jwt: string }) {
 		if (res.status !== 200) {
 			alert("Server Error.");
 		}
-		setIsSettingPW(false);
 	}
 
 	const copyToClipboard = async (text: string) => {

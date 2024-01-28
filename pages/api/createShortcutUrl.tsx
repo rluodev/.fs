@@ -72,7 +72,6 @@ async function mongoCreateOne(url: string, uuid: string, pw: string, expiry: num
 	await client.connect();
 	const database = client.db('fsdata');
 	const collection = database.collection('fsshortcuts');
-	const delTimeValue = 604800;
 	const slug = Math.random().toString(36).substring(2, 8);
 	const record = {
 		accessPath: url,

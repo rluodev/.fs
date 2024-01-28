@@ -4,7 +4,6 @@ import { createHash } from "crypto";
 import { useRouter } from "next/router";
 import { useState, useEffect, FormEvent } from "react";
 import { v4 as uuidv4 } from 'uuid';
-import imageType, { minimumBytes } from 'image-type';
 import FileTable from "@/components/fileTable";
 
 interface AuthResponse {
@@ -15,7 +14,6 @@ interface AuthResponse {
 const Page: React.FC = () => {
 	const router = useRouter();
 	const [authValid, setAuthValid] = useState<boolean>(false);
-	const [uploadedFileURL, setUploadedFileURL] = useState<string>('');
 	const [jwt, setJwt] = useState<string>('');
 	const [uploadProgress, setUploadProgress] = useState<number>(0);
 	const [uploadInProgress, setUploadInProgress] = useState<boolean>(false);
@@ -27,25 +25,21 @@ const Page: React.FC = () => {
 		const formData = new FormData(event.currentTarget);
 		const otp = formData.get('otp');
 
-		if (typeof otp === 'string') {
-			const res = await fetch('/api/checkAuth', {
-				method: 'POST',
-				body: JSON.stringify({ otp }),
-				headers: {
-					'Content-Type': 'application/json'
-				},
-			}).then(res => res.json()) as AuthResponse;
+		const res = await fetch('/api/checkAuth', {
+			method: 'POST',
+			body: JSON.stringify({ otp: otp }),
+			headers: {
+				'Content-Type': 'application/json'
+			},
+		}).then(res => res.json()) as AuthResponse;
 
-			if (res.valid && res.jwt) {
-				setAuthValid(true);
-				setJwt(res.jwt);
-				localStorage.setItem('jwt', res.jwt);
-				router.reload();
-			} else {
-				console.error('Invalid OTP');
-			}
+		if (res.valid && res.jwt) {
+			setAuthValid(true);
+			setJwt(res.jwt);
+			localStorage.setItem('jwt', res.jwt);
+			router.reload();
 		} else {
-			console.error('OTP is not a string');
+			alert('Invalid TOTP');
 		}
 	};
 
@@ -98,8 +92,6 @@ const Page: React.FC = () => {
 				if (xhr.status === 200) {
 					console.log('File uploaded successfully');
 					setUploadProgress(100); // Update progress to 100 upon completion
-					const fileUrl = `${url.split('?')[0]}`;
-					setUploadedFileURL(fileUrl);
 					setUploadInProgress(false);
 					router.push(`/${fileId}?uploadSuccess=true`)
 				} else {

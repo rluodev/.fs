@@ -3,7 +3,6 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { MongoClient, ServerApiVersion } from "mongodb";
 
 export default async function handler(req: any, res: any) {
-	// Usage example
 	if (req.method !== 'POST') {
 		res.status(405).json({ error: 'Method not allowed' });
 		return;
@@ -29,7 +28,6 @@ export default async function handler(req: any, res: any) {
 	const region = process.env.REGION;
 	const bucket = process.env.BUCKET_NAME;
 
-	// Convert deletion time to tagging format, URL encoded.
 	const tagging = `expire=${encodeURIComponent(delTime)}`;
 	const key = `${uuid}/${fileName}`;
 
@@ -42,7 +40,6 @@ export default async function handler(req: any, res: any) {
 		},
 	});
 
-	// Use the `getSignedUrl` function to create a pre-signed PUT URL
 	const putObjectCommand = new PutObjectCommand({
 		Bucket: bucket,
 		Key: key,

@@ -45,7 +45,6 @@ function validateJwt(jwt: string): boolean {
 	}
 	const decoded = jwtp.verify(jwt, secret, function (err, decoded) {
 		if (err) {
-			console.error("jwt invalid, asking to login again");
 			return false;
 		}
 	});
