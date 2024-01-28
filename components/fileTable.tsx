@@ -5,7 +5,7 @@ import { createHash } from "crypto";
 const PAGE_SIZE = 5;
 
 export default function FileTable(jwt: { jwt: string }) {
-	const [files, setFiles] = useState<{ uuid: string, fileName: string, passwordHashed: string, expireAt: Date }[]>([]); // Add type annotation for files state variable
+	const [files, setFiles] = useState<{ uuid: string, fileName: string, passwordHashed: string, expireAt: Date }[]>([]);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [totalPages, setTotalPages] = useState(0);
 	const [allSelected, setAllSelected] = useState(false);
