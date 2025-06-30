@@ -32,6 +32,8 @@ export default async function handler(req: any, res: any) {
 	const db = mongo.db('fsdata');
 	const collection = db.collection('fsstorrecord');
 	const record = await collection.findOne({ uuid: uuid });
+	const collection2 = db.collection('fsshortcuts');
+	const record2 = await collection2.findOne({ uuid: uuid });
 	if (!record) {
 		res.status(404).json({ error: 'Record not found' });
 		mongo.close();
@@ -60,6 +62,7 @@ export default async function handler(req: any, res: any) {
 		return;
 	}
 	await collection.deleteOne({ uuid: uuid });
+	await collection2.deleteOne({ uuid: uuid });
 	mongo.close();
 	res.status(200).json({ success: true });
 }

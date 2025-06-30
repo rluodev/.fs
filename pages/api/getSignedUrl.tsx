@@ -50,7 +50,7 @@ export default async function handler(req: any, res: any) {
 
 	try {
 		const presignedUrl = await getSignedUrl(s3Client, putObjectCommand, {
-			expiresIn: 86400,
+			expiresIn: 604800,
 			unhoistableHeaders: unhoistableHeaders,
 		});
 
@@ -63,11 +63,6 @@ export default async function handler(req: any, res: any) {
 		});
 
 		try {
-			const presignedUrl = await getSignedUrl(s3Client, putObjectCommand, {
-				expiresIn: 86400,
-				unhoistableHeaders: unhoistableHeaders,
-			});
-
 			await client.connect();
 			const database = client.db('fsdata');
 			const collection = database.collection('fsstorrecord');
