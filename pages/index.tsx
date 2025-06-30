@@ -53,56 +53,76 @@ const Page: React.FC = () => {
 		const pwHash = password ? createHash('sha512').update(password).digest('hex') : '';
 		const fileId = uuidv4();
 		if (file && deletionTime) {
-			// Request a pre-signed POST URL from the server
-			const response = await fetch('/api/getSignedUrl', {
-				method: 'POST',
-				body: JSON.stringify({ jwt: jwt, fileName: file.name.replaceAll(/[^a-zA-Z0-9\.\~-]/g, '-').replaceAll(' ', ''), uuid: fileId, delTime: deletionTime, pwHash: pwHash }),
-				headers: {
-					'Content-Type': 'application/json'
-				},
-			});
-			const { url } = await response.json() as { url: string };
-
-			// Reset upload progress to zero before starting the upload
-			setUploadProgress(0);
-
-			// Create a new XMLHttpRequest
-			const xhr = new XMLHttpRequest();
-
-			// Create a function to update state with the upload progress
-			const updateProgress = (event: ProgressEvent) => {
-				if (event.lengthComputable) {
-					// Calculate the upload progress as a percentage
-					const progress = (event.loaded / event.total) * 100;
-					setUploadProgress(progress);
-					// TODO: Update progress on UI with progress
-				}
-			};
-
-			// Set up the request
-			xhr.open('PUT', url, true);
-			xhr.setRequestHeader('Content-Type', file.type);
-			xhr.setRequestHeader('x-amz-tagging', `expire=${encodeURIComponent(deletionTime)}`);
-
-			// Event listener for upload progress
-			xhr.upload.onprogress = updateProgress;
-
-			// Event listener for when the request has completed
-			xhr.onload = () => {
-				if (xhr.status === 200) {
-					console.log('File uploaded successfully');
-					setUploadProgress(100); // Update progress to 100 upon completion
+			const fileSize = file.size;
+			if (file.size >= 5000000000) {
+				const response = await fetch('/api/startMultipartUpload', {
+					method: 'POST',
+					body: JSON.stringify({ jwt: jwt, fileName: file.name.replaceAll(/[^a-zA-Z0-9\.\~-]/g, '-').replaceAll(' ', ''), uuid: fileId, delTime: deletionTime, pwHash: pwHash }),
+					headers: {
+						'Content-Type': 'application/json'
+					},
+				});
+				if (response.status !== 200) {
+					alert('Server error');
 					setUploadInProgress(false);
-					router.push(`/${fileId}?uploadSuccess=true`)
-				} else {
-					console.error('File upload failed', xhr.responseText);
-					setUploadProgress(0); // Reset progress on failure
-					// TODO: Handle upload failed on UI
+					return;
 				}
-			};
+				const { uploadId } = await response.json();
+				const partSize = 5000000;
 
-			// Start the upload
-			xhr.send(file);
+			} else {
+				// Request a pre-signed POST URL from the server
+				const response = await fetch('/api/getSignedUrl', {
+					method: 'POST',
+					body: JSON.stringify({ jwt: jwt, fileName: file.name.replaceAll(/[^a-zA-Z0-9\.\~-]/g, '-').replaceAll(' ', ''), uuid: fileId, delTime: deletionTime, pwHash: pwHash }),
+					headers: {
+						'Content-Type': 'application/json'
+					},
+				});
+				const { url } = await response.json() as { url: string };
+
+				// Reset upload progress to zero before starting the upload
+				setUploadProgress(0);
+
+				// Create a new XMLHttpRequest
+				const xhr = new XMLHttpRequest();
+
+				// Create a function to update state with the upload progress
+				const updateProgress = (event: ProgressEvent) => {
+					if (event.lengthComputable) {
+						// Calculate the upload progress as a percentage
+						const progress = (event.loaded / event.total) * 100;
+						setUploadProgress(progress);
+						// TODO: Update progress on UI with progress
+					}
+				};
+
+				// Set up the request
+				xhr.open('PUT', url, true);
+				xhr.setRequestHeader('Content-Type', file.type);
+				xhr.setRequestHeader('x-amz-tagging', `expire=${encodeURIComponent(deletionTime)}`);
+
+				// Event listener for upload progress
+				xhr.upload.onprogress = updateProgress;
+
+				// Event listener for when the request has completed
+				xhr.onload = () => {
+					if (xhr.status === 200) {
+						console.log('File uploaded successfully');
+						setUploadProgress(100); // Update progress to 100 upon completion
+						setUploadInProgress(false);
+						router.push(`/${fileId}?uploadSuccess=true`)
+					} else {
+						console.error('File upload failed', xhr.responseText);
+						alert('File upload failed');
+						setUploadInProgress(false);
+						setUploadProgress(0); // Reset progress on failure
+					}
+				};
+
+				// Start the upload
+				xhr.send(file);
+			}
 		};
 	};
 
