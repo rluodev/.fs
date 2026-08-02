@@ -16,7 +16,7 @@
     "@aws-sdk/util-format-url": "^3.496.0",
     "@smithy/hash-node": "^2.1.1",
     "@smithy/protocol-http": "^3.1.1",
-    "@smithy/url-parser": "^2.1.1",
+    "@smithy/url-parser": "^4.4.16",
     "aws-cloudfront-sign": "^3.0.2",
     "image-type": "^5.2.0",
     "jsonwebtoken": "^9.0.2",
